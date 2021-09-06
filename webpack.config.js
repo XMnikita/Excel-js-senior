@@ -24,12 +24,14 @@ module.exports = {
     new HTMLWebpackPlugin({
       template: 'index.html',
     }),
-    new CopyPlugin([
-      {
-        from: path.resolve(__dirname, 'src/favicon.ico'),
-        to: path.resolve(__dirname, 'dist'),
-      },
-    ]),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/favicon.ico'),
+          to: path.resolve(__dirname, 'dist'),
+        },
+      ],
+    }),
     new MiniCssExtractPlugin({
       filename: 'bundle.[hash].css',
     }),
