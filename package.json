@@ -1,0 +1,23 @@
+{
+  "name": "excel-js-senior",
+  "version": "1.0.0",
+  "description": "Excell pure JS",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XMnikita/Excel-js-senior.git"
+  },
+  "keywords": [
+    "ARR",
+    "Corp"
+  ],
+  "author": "Nikita ARR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/XMnikita/Excel-js-senior/issues"
+  },
+  "homepage": "https://github.com/XMnikita/Excel-js-senior#readme"
+}
