@@ -25,8 +25,14 @@ export class Excel {
     // this.$el.insertAdjacentHTML('afterbegin', '<h1>Hello</h1>')
     this.$el.append(this.getRoot())
 
+    // Добавляем события
     this.components.forEach((component) => {
       component.init()
     })
+
+    // Удаляем события=========================
+    // this.components.forEach((component) => {
+    //   component.delete()
+    // })
   }
 }

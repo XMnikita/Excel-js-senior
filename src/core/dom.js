@@ -33,6 +33,10 @@ class Dom {
 
     return this
   }
+
+  off(eventType, callback) {
+    this.$el.removeEventListener(eventType, callback)
+  }
 }
 
 export function $(selector) {
