@@ -15,8 +15,8 @@ function createRow(content, index = '') {
     ? '<div class="row-resize" data-resize="row"></div>'
     : ''
   return `
-  <div class= "row">
-    <div class = "row-info">${index}
+  <div class= "row" data-parent_row="mainRow">
+    <div class = "row-info" data-parent_row="parentRow">${index}
       ${resizer}
     </div>
     <div class = "row-data">${content}</div>
@@ -25,7 +25,7 @@ function createRow(content, index = '') {
 
 function toColumn(element) {
   return `
-  <div class="column">
+  <div class="column" data-parent_column="parentColumn">
     ${element}
     <div class="col-resize" data-resize="col"></div>
   </div>

@@ -4,6 +4,15 @@ class Dom {
       typeof selector === 'string' ? document.querySelector(selector) : selector
   }
 
+  getClosestElement(selector) {
+    return $(this.$el.closest(selector))
+  }
+
+  editStyle(cssStyle, value) {
+    this.$el.style[cssStyle] = value
+    return this.$el
+  }
+
   html(html) {
     if (typeof html === 'string') {
       this.$el.innerHTML = html

@@ -1,5 +1,6 @@
 import { ExcelComponent } from '../../core/ExcelComponent'
 import { createTable } from './table.template'
+import { $ } from '@core/dom'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -7,7 +8,7 @@ export class Table extends ExcelComponent {
   constructor($root) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'mouseup', 'mousemove'],
+      listeners: ['mousedown'],
     })
   }
 
@@ -16,71 +17,95 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(event) {
-    this.isMouseDown = false
-    this.mouseXstart = 0
-    // console.log(event.target.getAttribute('data-resize'))
-    // console.log(event.target.dataset)
     if (event.target.dataset.resize === 'col') {
-      this.isMouseDown = true
-      this.target = event.target
-      this.mouseXstart =
-        event.pageX + document.querySelector('.excel__table').scrollLeft
-      this.target.style.left = event.pageX - 2 + 'px'
-      this.target.style.zIndex = 2000
-      this.target.parentElement.style.position = 'inherit'
+      // Started const and elements
+      const excelScrol = document.querySelector('.excel__table')
+      const startX = event.pageX + excelScrol.scrollLeft
+      const $resizer = $(event.target)
+      const $column = $resizer.getClosestElement(
+        '[data-parent_column = "parentColumn"]'
+      )
 
-      // console.dir(this.target)
-      // console.dir(event)
-    } else {
-      this.target = undefined
+      // Styles for resize like GoogleExcel
+      $column.editStyle('position', 'inherit')
+      $resizer.editStyle('zIndex', 2000)
+      $resizer.editStyle('left', startX + 'px')
+
+      document.onmousemove = (ev) => {
+        const value = ev.pageX + excelScrol.scrollLeft + 'px'
+        $resizer.editStyle('left', value)
+      }
+
+      document.onmouseup = (ev) => {
+        document.onmousemove = null
+        const currWidt = $column.$el.offsetWidth
+        const value =
+          currWidt + ev.pageX + excelScrol.scrollLeft - startX + 'px'
+        $column.editStyle('width', value)
+
+        // For resize all columns under HeaderColumn
+        const colId = $column.$el.innerText.charCodeAt() - 64
+
+        const arr = []
+        document
+          .querySelectorAll(`[data-resize = "col${colId}"]`)
+          .forEach((el, index) => (arr[index] = el))
+
+        arr.map((el) => {
+          el.style.width = value
+        })
+
+        $column.editStyle('position', 'relative')
+        $resizer.editStyle('left', 'auto')
+
+        document.onmouseup = null
+      }
+    } else if (event.target.dataset.resize === 'row') {
+      // Started const and elements
+      const excelScrol = document.querySelector('.excel__table')
+      const startY = event.pageY + excelScrol.scrollTop - 98
+      const $resizer = $(event.target)
+      const $parentRow = $resizer.getClosestElement(
+        '[data-parent_row = "parentRow"]'
+      )
+      const $row = $resizer.getClosestElement('[data-parent_row="mainRow"]')
+
+      // Styles for resize like GoogleExcel
+      $parentRow.editStyle('position', 'inherit')
+      $resizer.editStyle('zIndex', 2000)
+      $resizer.editStyle('top', startY + 'px')
+
+      document.onmousemove = (ev) => {
+        const value = ev.pageY + excelScrol.scrollTop - 98 + 'px'
+        $resizer.editStyle('top', value)
+      }
+
+      document.onmouseup = (ev) => {
+        document.onmousemove = null
+        const currHeight = $parentRow.$el.offsetHeight
+        const value =
+          currHeight + ev.pageY - 98 + excelScrol.scrollTop - startY + 'px'
+        $row.editStyle('height', value)
+
+        console.log(excelScrol.scrollTop)
+
+        // For resize all columns under HeaderColumn
+        // const colId = $column.$el.innerText.charCodeAt() - 64
+
+        // const arr = []
+        // document
+        //   .querySelectorAll(`[data-resize = "col${colId}"]`)
+        //   .forEach((el, index) => (arr[index] = el))
+
+        // arr.map((el) => {
+        //   el.style.width = value
+        // })
+
+        $parentRow.editStyle('position', 'relative')
+        $resizer.editStyle('top', 'auto')
+
+        document.onmouseup = null
+      }
     }
-  }
-
-  onMousemove(event) {
-    // event.target.dataset.resize === 'col'
-    if (this.isMouseDown) {
-      this.target.style.left =
-        event.pageX -
-        2 +
-        document.querySelector('.excel__table').scrollLeft +
-        'px'
-      // console.dir(target)
-      // console.dir(event)
-    }
-  }
-
-  onMouseup(event) {
-    if (!this.target) {
-      return ''
-    }
-    this.isMouseDown = false
-
-    const currWidt = this.target.parentElement.offsetWidth
-    console.dir(event.target.parentElement)
-    this.target.parentElement.style.width =
-      currWidt +
-      event.pageX +
-      document.querySelector('.excel__table').scrollLeft -
-      this.mouseXstart +
-      'px'
-
-    const colId = this.target.parentElement.innerText.charCodeAt() - 64
-
-    const arr = []
-    document
-      .querySelectorAll(`[data-resize = "col${colId}"]`)
-      .forEach((el, index) => (arr[index] = el))
-
-    arr.map((el) => {
-      el.style.width =
-        currWidt +
-        event.pageX +
-        document.querySelector('.excel__table').scrollLeft -
-        this.mouseXstart +
-        'px'
-    })
-
-    this.target.parentElement.style.position = 'relative'
-    this.target.style.left = 'auto'
   }
 }
