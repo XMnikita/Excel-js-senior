@@ -13,6 +13,27 @@ class Dom {
     return this.$el
   }
 
+  css(styles = {}) {
+    //============FOR IN ЛУЧШЕ НЕ ЮЗАТЬ=============
+    // птому, что может доставать свойста прототипа
+    // for (const key in styles) {
+    //   if (styles.hasOwnProperty(key)) {
+    //     this.$el.style[key] = styles[key]
+    //   }
+    // }
+
+    Object.keys(styles).forEach((key) => (this.$el.style[key] = styles[key]))
+
+    // ПЕРЕДАЛ КОНТЕКСТ В ФУНКЦИЮ-КОЛЛБЭК
+    // Object.keys(styles).forEach(
+    //   function (key) {
+    //     this.$el.style[key] = styles[key]
+    //   }.bind(this)
+    // )
+
+    return this
+  }
+
   html(html) {
     if (typeof html === 'string') {
       this.$el.innerHTML = html
