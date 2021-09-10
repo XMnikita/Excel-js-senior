@@ -13,7 +13,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(20)
+    return createTable(25)
   }
 
   onMousedown(event) {
@@ -46,14 +46,9 @@ export class Table extends ExcelComponent {
         // For resize all columns under HeaderColumn
         const colId = $column.$el.innerText.charCodeAt() - 64
 
-        const arr = []
         document
           .querySelectorAll(`[data-resize = "col${colId}"]`)
-          .forEach((el, index) => (arr[index] = el))
-
-        arr.map((el) => {
-          el.style.width = value
-        })
+          .forEach((el) => (el.style.width = value))
 
         $column.editStyle('position', 'relative')
         $resizer.editStyle('left', 'auto')
@@ -86,20 +81,6 @@ export class Table extends ExcelComponent {
         const value =
           currHeight + ev.pageY - 98 + excelScrol.scrollTop - startY + 'px'
         $row.editStyle('height', value)
-
-        console.log(excelScrol.scrollTop)
-
-        // For resize all columns under HeaderColumn
-        // const colId = $column.$el.innerText.charCodeAt() - 64
-
-        // const arr = []
-        // document
-        //   .querySelectorAll(`[data-resize = "col${colId}"]`)
-        //   .forEach((el, index) => (arr[index] = el))
-
-        // arr.map((el) => {
-        //   el.style.width = value
-        // })
 
         $parentRow.editStyle('position', 'relative')
         $resizer.editStyle('top', 'auto')
