@@ -13,13 +13,14 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(25)
+    return createTable(1000)
   }
 
   onMousedown(event) {
+    // console.log(this.$root)
     if (event.target.dataset.resize === 'col') {
       // Started const and elements
-      const excelScrol = document.querySelector('.excel__table')
+      const excelScrol = this.$root.$el
       const startX = event.pageX + excelScrol.scrollLeft
       const $resizer = $(event.target)
       const $column = $resizer.getClosestElement(
@@ -46,7 +47,7 @@ export class Table extends ExcelComponent {
         // For resize all columns under HeaderColumn
         const colId = $column.$el.innerText.charCodeAt() - 64
 
-        document
+        this.$root.$el
           .querySelectorAll(`[data-resize = "col${colId}"]`)
           .forEach((el) => (el.style.width = value))
 
@@ -57,7 +58,8 @@ export class Table extends ExcelComponent {
       }
     } else if (event.target.dataset.resize === 'row') {
       // Started const and elements
-      const excelScrol = document.querySelector('.excel__table')
+      // const excelScrol = document.querySelector('.excel__table')
+      const excelScrol = this.$root.$el
       const startY = event.pageY + excelScrol.scrollTop - 98
       const $resizer = $(event.target)
       const $parentRow = $resizer.getClosestElement(
