@@ -5,7 +5,8 @@ const CODES = {
 
 function toCell(_, index) {
   return `
-  <div class="cell" contenteditable="true" data-resize = "col${++index}">
+  <div class="cell" contenteditable="true" data-resize = "col${++index}"  
+  data-cell="true" data-selected="false">
   </div>
   `
 }
