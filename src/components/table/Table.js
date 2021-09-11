@@ -21,6 +21,12 @@ export class Table extends ExcelComponent {
     return createTable(20)
   }
 
+  init() {
+    super.init()
+
+    this.selectTable.selectCol(false, this.$root.find('[data-id="1:1"]').$el)
+  }
+
   onMousedown(event) {
     // console.log(this)
     resizeTable(event, this)
@@ -28,8 +34,8 @@ export class Table extends ExcelComponent {
 
   onClick(event) {
     if (event.target.dataset.cell === 'true') {
-      // console.log(this.selectTable)
-      this.selectTable.selectCol(event, event.target)
+      if (event.ctrlKey) this.selectTable.selectCol(true, event.target)
+      else if (!event.ctrlKey) this.selectTable.selectCol(false, event.target)
     }
   }
 }
