@@ -60,7 +60,6 @@ export class TableSelection {
 
   selectGroupCell(col) {
     const lastSelectedCell = this.group[this.group.length - 1]
-    console.log(this.group)
     if (this.group.length > 1) {
       this.group.forEach((el) => {
         el.dataset.selected = 'false'
@@ -70,46 +69,60 @@ export class TableSelection {
       this.selectCell(lastSelectedCell, $(lastSelectedCell))
     }
 
-    const lastI = parseInt(lastSelectedCell.dataset.id.split(':')[0])
-    const lastJ = parseInt(lastSelectedCell.dataset.id.split(':')[1])
-    const newI = parseInt(col.dataset.id.split(':')[0])
-    const newJ = parseInt(col.dataset.id.split(':')[1])
-    if (newI <= lastI) {
-      if (newJ <= lastJ) {
-        for (let i = newI; i <= lastI; i++) {
-          for (let j = newJ; j <= lastJ; j++) {
-            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
-            // console.log($tempCol.$el)
-            this.selectCell($tempCol.$el, $tempCol)
-          }
-        }
-      } else if (newJ >= lastJ) {
-        for (let i = newI; i <= lastI; i++) {
-          for (let j = lastJ; j <= newJ; j++) {
-            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
-            // console.log($tempCol.$el)
-            this.selectCell($tempCol.$el, $tempCol)
-          }
-        }
-      }
-    } else if (newI >= lastI) {
-      if (newJ <= lastJ) {
-        for (let i = lastI; i <= newI; i++) {
-          for (let j = newJ; j <= lastJ; j++) {
-            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
-            // console.log($tempCol.$el)
-            this.selectCell($tempCol.$el, $tempCol)
-          }
-        }
-      } else if (newJ >= lastJ) {
-        for (let i = lastI; i <= newI; i++) {
-          for (let j = lastJ; j <= newJ; j++) {
-            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
-            // console.log($tempCol.$el)
-            this.selectCell($tempCol.$el, $tempCol)
-          }
-        }
+    let lastI = parseInt(lastSelectedCell.dataset.id.split(':')[0])
+    let lastJ = parseInt(lastSelectedCell.dataset.id.split(':')[1])
+    let newI = parseInt(col.dataset.id.split(':')[0])
+    let newJ = parseInt(col.dataset.id.split(':')[1])
+
+    if (newI < lastI) [lastI, newI] = [newI, lastI]
+
+    if (newJ < lastJ) [lastJ, newJ] = [newJ, lastJ]
+
+    for (let i = lastI; i <= newI; i++) {
+      for (let j = lastJ; j <= newJ; j++) {
+        const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+        // console.log($tempCol.$el)
+        this.selectCell($tempCol.$el, $tempCol)
       }
     }
+
+    // ==============ГОВНОКОДИЩЕ==================================
+    // if (newI <= lastI) {
+    //   if (newJ <= lastJ) {
+    //     for (let i = newI; i <= lastI; i++) {
+    //       for (let j = newJ; j <= lastJ; j++) {
+    //         const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+    //         // console.log($tempCol.$el)
+    //         this.selectCell($tempCol.$el, $tempCol)
+    //       }
+    //     }
+    //   } else if (newJ >= lastJ) {
+    //     for (let i = newI; i <= lastI; i++) {
+    //       for (let j = lastJ; j <= newJ; j++) {
+    //         const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+    //         // console.log($tempCol.$el)
+    //         this.selectCell($tempCol.$el, $tempCol)
+    //       }
+    //     }
+    //   }
+    // } else if (newI >= lastI) {
+    //   if (newJ <= lastJ) {
+    //     for (let i = lastI; i <= newI; i++) {
+    //       for (let j = newJ; j <= lastJ; j++) {
+    //         const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+    //         // console.log($tempCol.$el)
+    //         this.selectCell($tempCol.$el, $tempCol)
+    //       }
+    //     }
+    //   } else if (newJ >= lastJ) {
+    //     for (let i = lastI; i <= newI; i++) {
+    //       for (let j = lastJ; j <= newJ; j++) {
+    //         const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+    //         // console.log($tempCol.$el)
+    //         this.selectCell($tempCol.$el, $tempCol)
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
