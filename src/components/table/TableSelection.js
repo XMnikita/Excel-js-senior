@@ -36,25 +36,79 @@ export class TableSelection {
           1
         )
       } else if (col.dataset.selected === 'false') {
-        $col.addClass(styleClass)
-        col.dataset.selected = 'true'
-        this.group.push(col)
+        this.selectCell(col, $col)
       }
     } else {
       if (col.dataset.selected === 'false' && this.group.length === 0) {
-        // this.group.pop()
-        $col.addClass(styleClass)
-        col.dataset.selected = 'true'
-        this.group.push(col)
-      } else if (col.dataset.selected === 'false' && this.group.length >= 1) {
+        this.selectCell(col, $col)
+      } else if (this.group.length >= 1) {
         this.group.forEach((el) => {
           el.dataset.selected = 'false'
           $(el).removeClass(styleClass)
         })
         this.group = []
-        $col.addClass(styleClass)
-        col.dataset.selected = 'true'
-        this.group.push(col)
+        this.selectCell(col, $col)
+      }
+    }
+  }
+
+  selectCell(cell, cellDom) {
+    cellDom.addClass(styleClass)
+    cell.dataset.selected = 'true'
+    this.group.unshift(cell)
+  }
+
+  selectGroupCell(col) {
+    const lastSelectedCell = this.group[this.group.length - 1]
+    console.log(this.group)
+    if (this.group.length > 1) {
+      this.group.forEach((el) => {
+        el.dataset.selected = 'false'
+        $(el).removeClass(styleClass)
+      })
+      this.group = []
+      this.selectCell(lastSelectedCell, $(lastSelectedCell))
+    }
+
+    const lastI = parseInt(lastSelectedCell.dataset.id.split(':')[0])
+    const lastJ = parseInt(lastSelectedCell.dataset.id.split(':')[1])
+    const newI = parseInt(col.dataset.id.split(':')[0])
+    const newJ = parseInt(col.dataset.id.split(':')[1])
+    if (newI <= lastI) {
+      if (newJ <= lastJ) {
+        for (let i = newI; i <= lastI; i++) {
+          for (let j = newJ; j <= lastJ; j++) {
+            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+            // console.log($tempCol.$el)
+            this.selectCell($tempCol.$el, $tempCol)
+          }
+        }
+      } else if (newJ >= lastJ) {
+        for (let i = newI; i <= lastI; i++) {
+          for (let j = lastJ; j <= newJ; j++) {
+            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+            // console.log($tempCol.$el)
+            this.selectCell($tempCol.$el, $tempCol)
+          }
+        }
+      }
+    } else if (newI >= lastI) {
+      if (newJ <= lastJ) {
+        for (let i = lastI; i <= newI; i++) {
+          for (let j = newJ; j <= lastJ; j++) {
+            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+            // console.log($tempCol.$el)
+            this.selectCell($tempCol.$el, $tempCol)
+          }
+        }
+      } else if (newJ >= lastJ) {
+        for (let i = lastI; i <= newI; i++) {
+          for (let j = lastJ; j <= newJ; j++) {
+            const $tempCol = this.$root.find(`[data-id = "${i}:${j}"]`)
+            // console.log($tempCol.$el)
+            this.selectCell($tempCol.$el, $tempCol)
+          }
+        }
       }
     }
   }

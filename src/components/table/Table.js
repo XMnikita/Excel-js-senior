@@ -34,8 +34,13 @@ export class Table extends ExcelComponent {
 
   onClick(event) {
     if (event.target.dataset.cell === 'true') {
-      if (event.ctrlKey) this.selectTable.selectCol(true, event.target)
-      else if (!event.ctrlKey) this.selectTable.selectCol(false, event.target)
+      if (event.ctrlKey) {
+        this.selectTable.selectCol(true, event.target)
+      } else if (event.shiftKey) {
+        this.selectTable.selectGroupCell(event.target)
+      } else if (!event.ctrlKey) {
+        this.selectTable.selectCol(false, event.target)
+      }
     }
   }
 }
