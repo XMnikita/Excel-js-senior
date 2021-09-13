@@ -125,4 +125,67 @@ export class TableSelection {
     //   }
     // }
   }
+
+  clear() {
+    this.group.forEach((el) => {
+      el.dataset.selected = 'false'
+      $(el).removeClass(styleClass)
+    })
+    this.group = []
+  }
+
+  switchCell(cell, event) {
+    event.preventDefault()
+    cell.$el.focus()
+    this.clear()
+    this.selectCell(cell.$el, cell)
+  }
+
+  selectCellKey(event) {
+    if (event.shiftKey) return
+    const keyCode = event.keyCode
+    const lastSelectedCell = this.group[this.group.length - 1]
+
+    let nextCell
+    let i = parseInt(lastSelectedCell.dataset.id.split(':')[0])
+    let j = parseInt(lastSelectedCell.dataset.id.split(':')[1])
+    try {
+      switch (keyCode) {
+        case 13:
+          nextCell = this.$root.find(`[data-id = "${++i}:${j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        case 9:
+          nextCell = this.$root.find(`[data-id = "${i}:${++j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        case 37:
+          nextCell = this.$root.find(`[data-id = "${i}:${--j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        case 38:
+          nextCell = this.$root.find(`[data-id = "${--i}:${j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        case 39:
+          nextCell = this.$root.find(`[data-id = "${i}:${++j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        case 40:
+          nextCell = this.$root.find(`[data-id = "${++i}:${j}"]`)
+          this.switchCell(nextCell, event)
+          break
+
+        default:
+          break
+      }
+    } catch (error) {
+      return
+    }
+  }
 }

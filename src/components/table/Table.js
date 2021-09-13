@@ -12,7 +12,7 @@ export class Table extends ExcelComponent {
   constructor($root) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'click'],
+      listeners: ['mousedown', 'click', 'keydown'],
     })
     this.selectTable = new TableSelection($root)
   }
@@ -42,5 +42,9 @@ export class Table extends ExcelComponent {
         this.selectTable.selectCol(false, event.target)
       }
     }
+  }
+
+  onKeydown(event) {
+    this.selectTable.selectCellKey(event)
   }
 }
