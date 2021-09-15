@@ -20,6 +20,7 @@ export class TableSelection {
   constructor($root) {
     this.$root = $root
     this.group = []
+    this.current
   }
 
   selectCol(isCtrl, col) {
@@ -50,6 +51,7 @@ export class TableSelection {
         this.selectCell(col, $col)
       }
     }
+    this.current = this.group[this.group.length - 1]
   }
 
   selectCell(cell, cellDom) {
@@ -85,6 +87,8 @@ export class TableSelection {
         this.selectCell($tempCol.$el, $tempCol)
       }
     }
+
+    this.current = this.group[this.group.length - 1]
 
     // ==============ГОВНОКОДИЩЕ==================================
     // if (newI <= lastI) {
@@ -187,5 +191,7 @@ export class TableSelection {
     } catch (error) {
       return
     }
+
+    this.current = this.group[this.group.length - 1]
   }
 }

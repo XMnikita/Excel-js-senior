@@ -9,10 +9,11 @@ export class Table extends ExcelComponent {
 
   // static selectTable = new TableSelection(this.$root)
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'click', 'keydown'],
+      listeners: ['mousedown', 'click', 'keydown', 'input'],
+      ...options,
     })
     this.selectTable = new TableSelection($root)
   }
@@ -25,6 +26,14 @@ export class Table extends ExcelComponent {
     super.init()
 
     this.selectTable.selectCol(false, this.$root.find('[data-id="1:1"]').$el)
+
+    this.$sub('formula:input', (text) => {
+      // console.log('Tablt text from formula: ', text)
+      this.selectTable.current.textContent = text
+    })
+    this.$sub('formula:enter', () => {
+      this.selectTable.current.focus()
+    })
   }
 
   onMousedown(event) {
@@ -40,11 +49,24 @@ export class Table extends ExcelComponent {
         this.selectTable.selectGroupCell(event.target)
       } else if (!event.ctrlKey) {
         this.selectTable.selectCol(false, event.target)
+        this.$emit('table:clickCell', this.selectTable.current.textContent)
       }
     }
   }
 
   onKeydown(event) {
     this.selectTable.selectCellKey(event)
+
+    const keys = [13, 9, 37, 38, 39, 40]
+
+    const { keyCode } = event
+
+    if (keys.includes(keyCode) && !event.shiftKey) {
+      this.$emit('table:switchCell', this.selectTable.current.textContent)
+    }
+  }
+
+  onInput(event) {
+    this.$emit('table:input', this.selectTable.current.textContent)
   }
 }
