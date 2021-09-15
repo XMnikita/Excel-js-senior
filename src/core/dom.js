@@ -8,9 +8,31 @@ class Dom {
     return $(this.$el.closest(selector))
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+
+  text(text) {
+    this.$el.textContent = text
+    return this
+  }
+
+  focusDom() {
+    this.$el.focus()
+    return this
+  }
+
   editStyle(cssStyle, value) {
     this.$el.style[cssStyle] = value
     return this.$el
+  }
+
+  addClass(className) {
+    return this.$el.classList.add(className)
+  }
+
+  removeClass(className) {
+    return this.$el.classList.remove(className)
   }
 
   css(styles = {}) {
