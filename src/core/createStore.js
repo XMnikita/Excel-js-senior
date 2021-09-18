@@ -26,3 +26,28 @@ export function createStore(rootReducer, initialState = {}) {
     },
   }
 }
+
+// export class Store {
+//   constructor(rootReducer) {
+//     this.rootReducer = rootReducer
+//     this.listeners = []
+//     this.state = {}
+//   }
+
+//   dispatch(action) {
+//     this.state = this.rootReducer(this.state, action)
+//     this.listeners.forEach((el) => el(this.state))
+//   }
+
+//   subscribe(fn) {
+//     this.listeners.push(fn)
+
+//     return () => {
+//       this.listeners = this.listeners.filter((el) => el !== fn)
+//     }
+//   }
+
+//   getState() {
+//     return this.state
+//   }
+// }

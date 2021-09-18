@@ -34,11 +34,15 @@ export class Table extends ExcelComponent {
     this.$sub('formula:enter', () => {
       this.selectTable.current.focus()
     })
+
+    this.$subscribeStore((state) => console.log('TableState: ', state))
   }
 
   onMousedown(event) {
     // console.log(this)
-    resizeTable(event, this)
+    resizeTable(event, this).then((data) => {
+      this.$dispatchStore({ type: 'RESIZE_TABLE', data })
+    })
   }
 
   onClick(event) {
@@ -50,6 +54,7 @@ export class Table extends ExcelComponent {
       } else if (!event.ctrlKey) {
         this.selectTable.selectCol(false, event.target)
         this.$emit('table:clickCell', this.selectTable.current.textContent)
+        // this.$dispatchStore({ type: '__TEST__' })
       }
     }
   }

@@ -31,6 +31,8 @@ export class Formula extends ExcelComponent {
     this.$sub('table:switchCell', (text) => {
       this.$root.find('.input').text(text)
     })
+
+    // this.$subscribeStore((state) => console.log('FormulaState: ', state))
   }
 
   onInput(event) {
