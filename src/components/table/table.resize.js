@@ -40,7 +40,7 @@ export function resizeTable(event, tableObj) {
 
         document.onmouseup = null
 
-        resolve({ id: colId, value })
+        resolve([{ id: colId, value }, 'col'])
       }
     } else if (event.target.dataset.resize === 'row') {
       // Started const and elements
@@ -85,9 +85,21 @@ export function resizeTable(event, tableObj) {
 
         document.onmouseup = null
 
-        // reolve($row ,value)
+        resolve([{ id: $row.$el.dataset.rowid, value }, 'row'])
       }
     }
   })
   // console.log(this.$root)
+}
+
+export function resizeCol(id, width) {
+  const col = document.querySelectorAll(`[data-resize = 'col${id}']`)
+  col.forEach((el) => {
+    el.style.width = width
+  })
+}
+
+export function resizeRow(id, height) {
+  const row = document.querySelector(`[data-rowid = '${id}']`)
+  row.style.height = height
 }

@@ -26,7 +26,7 @@ function createRow(content, index = '') {
     ? '<div class="row-resize" data-resize="row"></div>'
     : ''
   return `
-  <div class= "row" data-parent_row="mainRow">
+  <div class= "row" data-parent_row="mainRow" data-rowId = "${index}">
     <div class = "row-info" data-parent_row="parentRow">${index}
       ${resizer}
     </div>
@@ -34,9 +34,10 @@ function createRow(content, index = '') {
   </div>`
 }
 
-function toColumn(element) {
+function toColumn(element, index) {
   return `
-  <div class="column" data-parent_column="parentColumn">
+  <div class="column" data-parent_column="parentColumn" 
+  data-resize="col${++index}">
     ${element}
     <div class="col-resize" data-resize="col"></div>
   </div>

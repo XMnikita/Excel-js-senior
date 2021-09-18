@@ -1,9 +1,10 @@
 import { ExcelComponent } from '../../core/ExcelComponent'
 import { createTable } from './table.template'
 // import { $ } from '@core/dom'
-import { resizeTable } from './table.resize'
+import { resizeCol, resizeTable, resizeRow } from './table.resize'
 import { TableSelection } from './TableSelection'
 import * as actions from '../../redux/actions'
+import { storage } from '../../core/utils'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -36,12 +37,24 @@ export class Table extends ExcelComponent {
       this.selectTable.current.focus()
     })
 
+    // Create cols&rows sizes from LocalStorage
+    const colState = storage('excel-state').colState
+    Object.keys(colState).forEach((key) => {
+      resizeCol(key, colState[key])
+    })
+
+    const rowState = storage('excel-state').rowState
+    Object.keys(rowState).forEach((key) => {
+      resizeRow(key, rowState[key])
+    })
+
     // this.$subscribeStore((state) => console.log('TableState: ', state))
   }
 
   onMousedown(event) {
-    resizeTable(event, this).then((data) => {
-      this.$dispatchStore(actions.tableResize(data))
+    resizeTable(event, this).then(([data, type]) => {
+      if (type === 'col') this.$dispatchStore(actions.tableResizeCol(data))
+      else if (type === 'row') this.$dispatchStore(actions.tableResizeRow(data))
     })
   }
 
