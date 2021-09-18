@@ -3,6 +3,7 @@ import { createTable } from './table.template'
 // import { $ } from '@core/dom'
 import { resizeTable } from './table.resize'
 import { TableSelection } from './TableSelection'
+import * as actions from '../../redux/actions'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -35,13 +36,12 @@ export class Table extends ExcelComponent {
       this.selectTable.current.focus()
     })
 
-    this.$subscribeStore((state) => console.log('TableState: ', state))
+    // this.$subscribeStore((state) => console.log('TableState: ', state))
   }
 
   onMousedown(event) {
-    // console.log(this)
     resizeTable(event, this).then((data) => {
-      this.$dispatchStore({ type: 'RESIZE_TABLE', data })
+      this.$dispatchStore(actions.tableResize(data))
     })
   }
 
