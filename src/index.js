@@ -7,8 +7,9 @@ import './scss/index.scss'
 import { createStore } from './core/createStore'
 import { rootReducer } from './redux/rootReducer'
 import { storage } from './core/utils'
+import { defaulState } from './redux/intialState'
 
-const store = createStore(rootReducer, storage('excel-state'))
+const store = createStore(rootReducer, defaulState())
 
 store.subscribe((state) => {
   console.log(state)

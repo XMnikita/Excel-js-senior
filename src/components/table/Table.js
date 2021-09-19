@@ -39,14 +39,18 @@ export class Table extends ExcelComponent {
 
     // Create cols&rows sizes from LocalStorage
     const colState = storage('excel-state').colState
-    Object.keys(colState).forEach((key) => {
-      resizeCol(key, colState[key])
-    })
+    if (colState) {
+      Object.keys(colState).forEach((key) => {
+        resizeCol(key, colState[key])
+      })
+    }
 
     const rowState = storage('excel-state').rowState
-    Object.keys(rowState).forEach((key) => {
-      resizeRow(key, rowState[key])
-    })
+    if (rowState) {
+      Object.keys(rowState).forEach((key) => {
+        resizeRow(key, rowState[key])
+      })
+    }
 
     // this.$subscribeStore((state) => console.log('TableState: ', state))
   }
