@@ -12,6 +12,18 @@ export function rootReducer(state, action) {
       prevState = state.rowState || {}
       prevState[action.data.id] = action.data.value
       return { ...state, rowState: { ...prevState } }
+
+    case type.TABLE_INPUT_TEXT:
+      // console.log(action)
+      prevState = state.cellState || {}
+      prevState[action.data.id] = action.data.value.trimLeft().trimRight()
+        ? action.data.value
+        : ''
+      return {
+        ...state,
+        cellState: { ...prevState },
+        currentText: action.data.value.trim() ? action.data.value : '',
+      }
     default:
       return state
   }

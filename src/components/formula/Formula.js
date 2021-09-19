@@ -1,4 +1,5 @@
 import { ExcelComponent } from '../../core/ExcelComponent'
+// import { tableInputText } from '../../redux/actions'
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula'
@@ -24,6 +25,10 @@ export class Formula extends ExcelComponent {
       this.$root.find('.input').text(text)
     })
 
+    // this.$subscribeStore((state) => {
+    //   this.$root.find('.input').text(state.currentText)
+    // })
+
     this.$sub('table:clickCell', (text) => {
       this.$root.find('.input').text(text)
     })
@@ -37,6 +42,8 @@ export class Formula extends ExcelComponent {
 
   onInput(event) {
     this.$emit('formula:input', event.target.textContent)
+
+    // this.$dispatchStore(tableInputText(event.target.textContent))
   }
 
   onClick() {

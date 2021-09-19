@@ -11,11 +11,13 @@ const CODES = {
 //   `
 // }
 
-function toCell(i) {
+function toCell(i, cells = {}) {
   return function (_, col) {
+    const content = cells[`${i}:${++col}`] ? cells[`${i}:${col}`] : ''
     return `
-    <div class="cell" contenteditable="true" data-resize = "col${++col}"  
+    <div class="cell" contenteditable="true" data-resize = "col${col}"  
     data-cell="true" data-selected="false" data-id="${i}:${col}">
+    ${content}
     </div>
     `
   }
@@ -48,7 +50,7 @@ function toChar(_, index) {
   return String.fromCharCode(CODES.A + index)
 }
 
-export function createTable(rowCount = 20) {
+export function createTable(rowCount = 20, state = {}) {
   const colsCount = CODES.Z - CODES.A + 1
   const rows = []
 
@@ -59,7 +61,10 @@ export function createTable(rowCount = 20) {
   // const cols2 = new Array(colsCount).fill('').map(toCell).join('')
 
   for (let i = 1; i <= rowCount; i++) {
-    const cols2 = new Array(colsCount).fill('').map(toCell(i)).join('')
+    const cols2 = new Array(colsCount)
+      .fill('')
+      .map(toCell(i, state.cellState))
+      .join('')
     rows.push(createRow(cols2, i))
   }
 

@@ -21,18 +21,30 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(20)
+    return createTable(20, storage('excel-state'))
   }
 
   init() {
     super.init()
 
     this.selectTable.selectCol(false, this.$root.find('[data-id="1:1"]').$el)
+    this.$emit('table:clickCell', this.selectTable.current.textContent)
 
     this.$sub('formula:input', (text) => {
       // console.log('Tablt text from formula: ', text)
       this.selectTable.current.textContent = text
+      this.$dispatchStore(
+        actions.tableInputText({
+          id: this.selectTable.current.dataset.id,
+          value: text,
+        })
+      )
     })
+
+    // this.$subscribeStore((state) => {
+    //   this.selectTable.current.textContent = state.currentText
+    // })
+
     this.$sub('formula:enter', () => {
       this.selectTable.current.focus()
     })
@@ -71,6 +83,12 @@ export class Table extends ExcelComponent {
       } else if (!event.ctrlKey) {
         this.selectTable.selectCol(false, event.target)
         this.$emit('table:clickCell', this.selectTable.current.textContent)
+        this.$dispatchStore(
+          actions.tableInputText({
+            id: this.selectTable.current.dataset.id,
+            value: this.selectTable.current.textContent,
+          })
+        )
         // this.$dispatchStore({ type: '__TEST__' })
       }
     }
@@ -85,10 +103,23 @@ export class Table extends ExcelComponent {
 
     if (keys.includes(keyCode) && !event.shiftKey) {
       this.$emit('table:switchCell', this.selectTable.current.textContent)
+      this.$dispatchStore(
+        actions.tableInputText({
+          id: this.selectTable.current.dataset.id,
+          value: this.selectTable.current.textContent,
+        })
+      )
     }
   }
 
   onInput(event) {
     this.$emit('table:input', this.selectTable.current.textContent)
+
+    this.$dispatchStore(
+      actions.tableInputText({
+        id: this.selectTable.current.dataset.id,
+        value: this.selectTable.current.textContent,
+      })
+    )
   }
 }
